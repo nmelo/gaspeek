@@ -23,6 +23,7 @@ brews:
   - repository:
       owner: nmelo
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     directory: Formula
     homepage: https://github.com/nmelo/gaspeek
     description: Capture output from Claude agents in tmux windows
