@@ -61,4 +61,6 @@ Claude detection checks `pane_current_command` for `node`, `claude`, or version 
 
 ## See also
 
-[gn](https://github.com/nmelo/gasnudge) - the companion tool for sending nudge messages to Claude agents in tmux windows
+- [gn](https://github.com/nmelo/gasnudge) - send nudge messages to Claude agents in tmux windows
+- [gp](https://github.com/nmelo/gaspeek) - capture output from Claude agents in tmux windows
+- [gm](https://github.com/nmelo/gasmail) - agent-to-agent messaging using beads
