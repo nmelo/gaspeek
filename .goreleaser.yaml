@@ -19,21 +19,8 @@ archives:
   - format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 
-brews:
-  - repository:
-      owner: nmelo
-      name: homebrew-tap
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    directory: Formula
-    homepage: https://github.com/nmelo/gaspeek
-    description: Capture output from Claude agents in tmux windows
-    license: MIT
-    dependencies:
-      - name: tmux
-    install: |
-      bin.install "gp"
-    test: |
-      assert_match "gp", shell_output("#{bin}/gp --help")
+# Formula is manually maintained in nmelo/homebrew-tap for pre-built binaries
+# Update Formula/gp.rb after each release with new URLs and checksums from checksums.txt
 
 checksum:
   name_template: checksums.txt
