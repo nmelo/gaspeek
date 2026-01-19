@@ -1,0 +1,42 @@
+version: 2
+
+project_name: gaspeek
+
+builds:
+  - binary: gp
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+
+brews:
+  - repository:
+      owner: nmelo
+      name: homebrew-tap
+    directory: Formula
+    homepage: https://github.com/nmelo/gaspeek
+    description: Capture output from Claude agents in tmux windows
+    license: MIT
+    dependencies:
+      - name: tmux
+    install: |
+      bin.install "gp"
+    test: |
+      assert_match "gp", shell_output("#{bin}/gp --help")
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  draft: false
+  prerelease: auto
