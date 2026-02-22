@@ -19,17 +19,50 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "gp [flags] [window]",
 	Short: "Read output from tmux windows",
-	Long: `gaspeek reads recent output from tmux windows.
+	Long: `gaspeek (gp) reads recent output from Claude agents in tmux windows.
 
-Examples:
-  gp editor                    # Capture last 100 lines from 'editor' window
-  gp -n 50 editor              # Capture last 50 lines
-  gp --all                     # Capture from all windows
-  gp --all --detect            # Only windows running Claude`,
+BEHAVIOR:
+  - Non-intrusive: reads scrollback buffer without sending any input
+  - Single window mode: specify window name as argument
+  - Multi-window mode: use --all to capture from all windows
+  - Excludes caller's own window by default in multi-window mode
+  - Output includes headers showing window name and session
+
+CLAUDE DETECTION (--detect flag):
+  Identifies Claude by pane_current_command matching:
+  - "claude" or "node" (direct process)
+  - Version pattern like "2.1.25"
+  - Child processes of shells (inspects via pgrep)
+
+USE CASES FOR AGENT COORDINATION:
+  - Check agent status without interrupting their work
+  - Monitor swarm progress across multiple workers
+  - Debug agent behavior by reviewing recent output
+  - Verify an agent received and processed a message
+  - Gather context before sending follow-up instructions
+
+EXAMPLES:
+  gp worker-1                        # Last 100 lines from 'worker-1'
+  gp -n 50 worker-1                  # Last 50 lines
+  gp -n 200 worker-1                 # Last 200 lines (more context)
+  gp --all                           # Capture from all windows
+  gp --all --detect                  # Only windows running Claude
+  gp -s swarm --all                  # All windows in 'swarm' session
+  gp -s swarm --all --detect         # Claude windows in 'swarm' session
+
+OUTPUT FORMAT:
+  Single window: Raw output only
+  Multi-window:  Headers like "=== worker-1 (session:0) ===" before each
+
+RELATED TOOLS:
+  gn (gasnudge) - Interrupt agents urgently (sends Escape + Enter)
+  ga (gasadd)   - Queue messages without interrupting
+  gm (gasmail)  - Persistent messaging via beads database`,
 	RunE: runPeek,
 }
 
-func Execute() error {
+func Execute(version string) error {
+	rootCmd.Version = version
 	return rootCmd.Execute()
 }
 
